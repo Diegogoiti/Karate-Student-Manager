@@ -25,7 +25,7 @@ pub fn Home() -> Element {
             "{texto_boton}"
         }}
 
-            DataTable { alumnos: estado.read().alumnos.clone() }
+            DataTable {  estado: estado }
             
         
             
@@ -45,7 +45,7 @@ pub fn Buscar() -> Element {
     rsx! {
         div { class: "flex flex-col h-full space-y-4",
             div { class: "relative flex items-center justify-center py-2",
-                h2 { class: "text-3xl font-bold text-gray-800 text-center", "Consultar" }
+                h2 { class: "text-3xl font-bold text-gray-800 text-center", "Buscar" }
                 button {
             class: "absolute right-0 px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition-colors text-sm",
             onclick: move |_| {
@@ -57,7 +57,7 @@ pub fn Buscar() -> Element {
 
            
             SearchBar {  }
-            DataTable { alumnos: estado.read().alumnos.clone() }
+            DataTable { estado: estado }
         }
          
     }

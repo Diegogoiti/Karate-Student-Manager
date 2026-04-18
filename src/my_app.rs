@@ -17,8 +17,8 @@ impl MyApp {
     }
 
 
-pub fn toggle_seleccion(&mut self, index_in_vec: usize) {
-    if let Some(alumno) = self.alumnos.get_mut(index_in_vec) {
+pub fn toggle_seleccion(&mut self, id: usize) {
+    if let Some(alumno) = self.alumnos.iter_mut().find(|a| a.id == id) {
         // Invertimos el estado del alumno
         alumno.seleccionado = !alumno.seleccionado;
         

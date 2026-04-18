@@ -3,14 +3,16 @@
 
 use dioxus::prelude::*;
 use crate::models::Alumno;
+use crate::my_app;
 
 
 
 
 #[component]
-pub fn DataTable(alumnos: Vec<Alumno>) -> Element {
+pub fn DataTable(estado: Signal<my_app::MyApp>) -> Element {
+    let alumnos = estado.read().alumnos.clone();
     rsx! {
-        // Altura fija y overflow-y-auto para que el scroll sea interno
+        
         div { class: "overflow-auto rounded-xl border border-gray-800 bg-gray-900 shadow-xl ",
             table { class: "w-full border-collapse text-left text-xs md:text-sm",
                 thead { 
@@ -30,24 +32,27 @@ tr {
 }
                 }
                 tbody { class: "divide-y divide-gray-800 text-gray-300",
-                    for alumno in alumnos.iter() {
+                    for alumno in alumnos {
                         tr { class: "hover:bg-gray-800/50 transition-colors",
                             td { class: "px-4 py-3",
                                 input { 
                                     r#type: "checkbox", 
                                     class: "w-4 h-4 rounded border-gray-700 bg-gray-800 text-blue-600 focus:ring-blue-500",
-                                    checked: alumno.seleccionado 
+                                    checked: alumno.seleccionado ,
+                                    onchange: move |_| {
+                                        estado.write().toggle_seleccion(alumno.id);
+                                    }
                                 }
                             }
                             td { class: "px-4 py-3 font-mono text-gray-500", "#{alumno.id}" }
                             td { class: "px-4 py-3 font-bold text-white", "{alumno.nombre}" }
                             td { class: "px-4 py-3",
-                                span { class: "px-2 py-1 rounded bg-gray-700 text-[10px] uppercase font-bold text-gray-300", "{alumno.cinta}" }
+                                span { class: "px-2 py-1 rounded bg-gray-700 text-[10px] uppercase font-bold text-gray-300", "{alumno.rango}" }
                             }
                             td { class: "px-4 py-3", "{alumno.edad}" }
-                            td { class: "px-4 py-3", "{alumno.fecha_nacimiento}" }
+                            td { class: "px-4 py-3", "{alumno.fecha_de_nacimiento}" }
                             td { class: "px-4 py-3", "{alumno.representante}" }
-                            td { class: "px-4 py-3 text-blue-400 font-mono", "{alumno.telefono}" }
+                            td { class: "px-4 py-3 text-blue-400 font-mono", "{alumno.numero_contacto}" }
                         }
                     }
                 }
