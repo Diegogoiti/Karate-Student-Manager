@@ -215,7 +215,7 @@ fn App() -> Element {
     });
 
 let estado_app = use_signal(|| {
-        my_app::MyApp::new(lista_alumnos.read().clone())
+        my_app::MyApp::new()
     });
 
     // 3. Proveemos el signal ya creado al contexto

@@ -121,7 +121,7 @@ impl Database {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nombre TEXT NOT NULL,
             fecha_de_nacimiento TEXT NOT NULL,
-            rango REAL NOT NULL,
+            rango INTEGER NOT NULL,
             representante TEXT NOT NULL,
             numero_contacto TEXT NOT NULL
         )",
