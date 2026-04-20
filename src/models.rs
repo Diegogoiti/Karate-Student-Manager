@@ -9,7 +9,7 @@ pub struct Alumno {
     pub id: usize,
     pub nombre: String,
     pub rango: u32,
-    pub edad: i32,
+
     pub fecha_de_nacimiento: String,
     pub representante: String,
     pub numero_contacto: String,
@@ -32,7 +32,7 @@ impl Alumno {
             rango: rango as u32,
             representante: representante.to_string(),
             numero_contacto: numero_contacto.to_string(),
-            edad: 1, //es provicional, despues lo calculare a partir de la fecha de nacimiento
+        
             seleccionado: false,
         }
     }
@@ -52,7 +52,7 @@ impl Alumno {
             rango,
             representante: representante.to_string(),
             numero_contacto: numero_contacto.to_string(),
-            edad: 1, //es provicional, despues lo calculare a partir de la fecha de nacimiento
+            
             seleccionado: false, //esto no deberia estar aqui, se debe calcular directamente mediante el hashset porque contiene los ids de los seleccionados
         }
     }

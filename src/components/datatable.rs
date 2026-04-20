@@ -49,7 +49,7 @@ tr {
                             td { class: "px-4 py-3",
                                 span { class: "px-2 py-1 rounded bg-gray-700 text-[10px] uppercase font-bold text-gray-300", "{alumno.rango}" }
                             }
-                            td { class: "px-4 py-3", "{alumno.edad}" }
+                            td { class: "px-4 py-3", "{alumno.edad()}" }
                             td { class: "px-4 py-3", "{alumno.fecha_de_nacimiento}" }
                             td { class: "px-4 py-3", "{alumno.representante}" }
                             td { class: "px-4 py-3 text-blue-400 font-mono", "{alumno.numero_contacto}" }
