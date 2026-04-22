@@ -23,34 +23,20 @@ impl MyApp {
 
 
 pub fn toggle_seleccion(&mut self, id: usize) {
-    if let Some(alumno) = self.alumnos.iter_mut().find(|a| a.id == id) {
-        // Invertimos el estado del alumno
-        alumno.seleccionado = !alumno.seleccionado;
-        
-        // Sincronizamos con el HashSet
-        if alumno.seleccionado {
-            self.seleccionados.insert(alumno.id as usize);
-        } else {
-            self.seleccionados.remove(&(alumno.id as usize));
-        }
+    if self.seleccionados.contains(&id) {
+        self.seleccionados.remove(&id);
+    } else {
+        self.seleccionados.insert(id);
     }
 }
 
+
 pub fn toggle_all(&mut self) {
     if !self.seleccionados.is_empty() {
-        // 1. Limpiamos el Set
         self.seleccionados.clear();
-        // 2. IMPORTANTE: Actualizamos el booleano en cada alumno
-        for alumno in self.alumnos.iter_mut() {
-            alumno.seleccionado = false;
-        }
     } else {
-        // 1. Llenamos el Set con los IDs (o índices)
-        for alumno in self.alumnos.iter_mut() {
-            self.seleccionados.insert(alumno.id as usize);
-            // 2. IMPORTANTE: Marcamos como seleccionado
-            alumno.seleccionado = true;
-        }
+        self.seleccionados = self.alumnos.iter().map(|a| a.id).collect();
     }
 }
+
 }
