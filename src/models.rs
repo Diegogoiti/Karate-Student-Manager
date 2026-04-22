@@ -13,7 +13,7 @@ pub struct Alumno {
     pub fecha_de_nacimiento: String,
     pub representante: String,
     pub numero_contacto: String,
-    pub seleccionado: bool,
+    
 }
 
 impl Alumno {
@@ -33,7 +33,7 @@ impl Alumno {
             representante: representante.to_string(),
             numero_contacto: numero_contacto.to_string(),
         
-            seleccionado: false,
+            
         }
     }
 
@@ -53,7 +53,7 @@ impl Alumno {
             representante: representante.to_string(),
             numero_contacto: numero_contacto.to_string(),
             
-            seleccionado: false, //esto no deberia estar aqui, se debe calcular directamente mediante el hashset porque contiene los ids de los seleccionados
+             //esto no deberia estar aqui, se debe calcular directamente mediante el hashset porque contiene los ids de los seleccionados
         }
     }
 
