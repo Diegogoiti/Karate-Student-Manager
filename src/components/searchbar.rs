@@ -28,7 +28,7 @@ pub fn SearchBar(on_input: EventHandler<(Columnas,String)>) -> Element {
                         "id" => selected_param.set(Columnas::Id),
                         "Representante" => selected_param.set(Columnas::Representante),
                         "Teléfono" => selected_param.set(Columnas::Telefono),
-                        _ => ()
+                        _ => {}
                     }
                     notificar();
                 },
@@ -38,14 +38,13 @@ pub fn SearchBar(on_input: EventHandler<(Columnas,String)>) -> Element {
                 option { value: "Teléfono", "Teléfono" }
             }
 
-           
-
             // Input de texto
             input {
                 class: "flex-1 p-2 rounded border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none",
                 placeholder: "Buscar alumno...",
                 value: "{search_text}",
-                oninput: move |evt| {search_text.set(evt.value());
+                oninput: move |evt| {
+                    search_text.set(evt.value());
                     notificar();
                 },
             }

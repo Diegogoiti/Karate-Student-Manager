@@ -77,7 +77,7 @@ let estado_app = use_signal(|| {
 
 
     rsx! {
-        
+
         style { "{CSS}" }
         Router::<Route> {}
     }

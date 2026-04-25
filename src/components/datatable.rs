@@ -13,13 +13,12 @@ use crate::my_app;
 pub fn DataTable(alumnos_lista: Signal<Vec<Alumno>>, estado: Signal<my_app::MyApp>) -> Element {
     let alumnos = alumnos_lista.read().clone();
     rsx! {
-        
+
         div { class: "overflow-auto rounded-xl border border-gray-800 bg-gray-900 shadow-xl ",
             table { class: "w-full border-collapse text-left text-xs md:text-sm",
-                thead { 
+                thead {
                     // sticky y top-0 mantienen la fila visible al bajar
-tr {
-    class: "sticky top-0 text-white bg-gray-800",
+                    tr { class: "sticky top-0 text-white bg-gray-800",
                         // Aplicamos sticky y top-0 a cada th para asegurar compatibilidad
                         // Agregamos z-20 para que los datos no pasen "por encima" de la cabecera
                         th { class: " z-20  px-4 py-3", "Sel." }
@@ -30,31 +29,36 @@ tr {
                         th { class: " z-20  px-4 py-3", "F. Nacimiento" }
                         th { class: " z-20  px-4 py-3", "Representante" }
                         th { class: " z-20 px-4 py-3", "Teléfono" }
-}
+                    }
                 }
                 tbody { class: "divide-y divide-gray-800 text-gray-300",
                     for alumno in alumnos {
-                        tr { class: "hover:bg-gray-800/50 transition-colors",
-                        onclick: move |_| {
-                                        estado.write().toggle_seleccion(alumno.id);
-                                    },
+                        tr {
+                            class: "hover:bg-gray-800/50 transition-colors",
+                            onclick: move |_| {
+                                estado.write().toggle_seleccion(alumno.id);
+                            },
                             td { class: "px-4 py-3",
-                                input { 
-                                    r#type: "checkbox", 
+                                input {
+                                    r#type: "checkbox",
                                     class: "w-4 h-4 rounded border-gray-700 bg-gray-800 text-blue-600 focus:ring-blue-500",
-                                    checked: estado.read().seleccionados.contains(&alumno.id) ,
-                                    
+                                    checked: estado.read().seleccionados.contains(&alumno.id),
+
                                 }
                             }
                             td { class: "px-4 py-3 font-mono text-gray-500", "#{alumno.id}" }
                             td { class: "px-4 py-3 font-bold text-white", "{alumno.nombre}" }
                             td { class: "px-4 py-3",
-                                span { class: "px-2 py-1 rounded bg-gray-700 text-[10px] uppercase font-bold text-gray-300", "{alumno.rango}" }
+                                span { class: "px-2 py-1 rounded bg-gray-700 text-[10px] uppercase font-bold text-gray-300",
+                                    "{alumno.rango}"
+                                }
                             }
                             td { class: "px-4 py-3", "{alumno.edad()}" }
                             td { class: "px-4 py-3", "{alumno.fecha_de_nacimiento}" }
                             td { class: "px-4 py-3", "{alumno.representante}" }
-                            td { class: "px-4 py-3 text-blue-400 font-mono", "{alumno.numero_contacto}" }
+                            td { class: "px-4 py-3 text-blue-400 font-mono",
+                                "{alumno.numero_contacto}"
+                            }
                         }
                     }
                 }
