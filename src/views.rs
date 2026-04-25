@@ -27,7 +27,7 @@ pub fn Home() -> Element {
                 button {
             class: "absolute right-0 px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition-colors text-sm",
             onclick: move |_| {
-                estado.write().toggle_all();
+                estado.write().toggle_all(alumnos_lista.read().clone());
             },
             "{texto_boton}"
         }}
@@ -47,10 +47,11 @@ pub fn Home() -> Element {
 #[component]
 pub fn Buscar() -> Element {
     let mut estado = use_context::<Signal<my_app::MyApp>>();
-    let hay_seleccion = !estado.read().seleccionados.is_empty();
-    let texto_boton = if hay_seleccion { "Deseleccionar todos" } else { "Seleccionar todos" };
+    
     let mut filtro = use_signal(|| (my_app::Columnas::Nombre, String::new()));
     let alumnos_filtrados = use_signal(|| estado.read().alumnos.clone());
+    let  hay_seleccion = alumnos_filtrados.read().iter().any(|a| estado.read().seleccionados.contains(&a.id));
+    let texto_boton = if hay_seleccion { "Deseleccionar todos" } else { "Seleccionar todos" };
 
     {
         let filtro = filtro.clone();
@@ -69,7 +70,7 @@ pub fn Buscar() -> Element {
                 button {
             class: "absolute right-0 px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition-colors text-sm",
             onclick: move |_| {
-                estado.write().toggle_all();
+                estado.write().toggle_all(alumnos_filtrados.read().clone());
             },
             "{texto_boton}"
         }}

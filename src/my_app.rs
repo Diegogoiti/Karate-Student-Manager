@@ -43,11 +43,21 @@ pub fn toggle_seleccion(&mut self, id: usize) {
 }
 
 
-pub fn toggle_all(&mut self) {
-    if !self.seleccionados.is_empty() {
-        self.seleccionados.clear();
+pub fn toggle_all(&mut self, alumnos_visibles: Vec<Alumno>) {
+    // 1. Verificamos si TODOS los alumnos que se están viendo ya están seleccionados
+    let todos_seleccionados = alumnos_visibles.iter()
+        .all(|a| self.seleccionados.contains(&a.id));
+
+    if todos_seleccionados {
+        // Si ya todos están, quitamos de la selección SOLO los que estamos viendo
+        for alumno in alumnos_visibles {
+            self.seleccionados.remove(&alumno.id);
+        }
     } else {
-        self.seleccionados = self.alumnos.iter().map(|a| a.id).collect();
+        // Si falta alguno (o todos), añadimos todos los visibles a la selección
+        for alumno in alumnos_visibles {
+            self.seleccionados.insert(alumno.id);
+        }
     }
 }
 
