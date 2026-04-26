@@ -1,8 +1,10 @@
 [package]
-name = "dyfit-student-manager"
-version = "0.1.0"
+name = "karate-student-manager"
+version = "0.1.0-alpha"
 authors = ["Diego <diegogoitiazx1@gmail.com>"]
 edition = "2021"
+homepage = "https://diegogoitia-dev.onrender.com"
+description = "Gestor de alumnos de karate"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -17,3 +19,5 @@ web = ["dioxus/web"]
 desktop = ["dioxus/desktop"]
 mobile = ["dioxus/mobile"]
 
+[build-dependencies]
+winres = "0.1"
