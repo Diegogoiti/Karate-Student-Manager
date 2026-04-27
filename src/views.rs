@@ -64,7 +64,7 @@ pub fn Buscar() -> Element {
         let mut alumnos_filtrados = alumnos_filtrados.clone();
         use_effect(move || {
             let app = estado.read();
-            alumnos_filtrados.set(app.filtrar_alumnos(filtro.read().0, &filtro.read().1));
+            alumnos_filtrados.set(app.buscar_alumnos(filtro.read().0, &filtro.read().1));
         });
     }
 
@@ -98,28 +98,36 @@ pub fn Buscar() -> Element {
     }
 }
 
+
 #[component]
 pub fn Filtrar() -> Element {
-        let mut estado = use_context::<Signal<my_app::MyApp>>();
+    let mut estado = use_context::<Signal<my_app::MyApp>>();
     
-    let mut filtro = use_signal(|| (my_app::Columnas::Nombre, String::new()));
-    let alumnos_filtrados = use_signal(|| estado.read().alumnos.clone());
+    // Iniciamos con Cinta por defecto para que coincida con el componente Filter
+    let mut filtro = use_signal(|| (my_app::Columnas::Cinta, "Blanca".to_string()));
+    let mut alumnos_filtrados = use_signal(|| estado.read().alumnos.clone());
+    
     let todos_seleccionados = !alumnos_filtrados.read().is_empty()
         && alumnos_filtrados
             .read()
             .iter()
             .all(|a| estado.read().seleccionados.contains(&a.id));
+    
     let texto_boton = if todos_seleccionados { "Deseleccionar todos" } else { "Seleccionar todos" };
 
-    {
-        let filtro = filtro.clone();
-        let estado = estado.clone();
-        let mut alumnos_filtrados = alumnos_filtrados.clone();
-        use_effect(move || {
-            let app = estado.read();
-            alumnos_filtrados.set(app.filtrar_alumnos(filtro.read().0, &filtro.read().1));
-        });
-    }
+    // Lógica de filtrado reactiva
+    use_effect(move || {
+        let app = estado.read();
+        let (columna, valor) = filtro.read().clone();
+        
+        let resultado = match columna {
+            Columnas::Cinta => app.filtrar_cinta(valor),
+            Columnas::Edad => app.filtrar_edad(valor),
+            _ => app.buscar_alumnos(columna, &valor),
+        };
+        
+        alumnos_filtrados.set(resultado);
+    });
 
     rsx! {
         div { class: "flex flex-col h-full space-y-4",
@@ -137,8 +145,8 @@ pub fn Filtrar() -> Element {
             Filter {
                 on_input: move |data| filtro.set(data),
                 options: vec![
-                    ("Cinta".to_string(),Columnas::Cinta),
-                    ("Edad".to_string(),Columnas::Edad),
+                    ("Cinta".to_string(), Columnas::Cinta),
+                    ("Edad".to_string(), Columnas::Edad),
                 ],
                 placeholder: "Filtrar alumnos...".to_string(),
                 initial_param: my_app::Columnas::Cinta,
@@ -146,8 +154,10 @@ pub fn Filtrar() -> Element {
 
             DataTable { alumnos_lista: alumnos_filtrados, estado }
         }
+    }
 }
-}
+
+
 #[component]
 pub fn Agregar() -> Element {
     rsx! {

@@ -31,6 +31,7 @@ impl Alumno {
         rango: u32,
         representante: &str,
         numero_contacto: &str,
+        rallita: &bool
     ) -> Self {
         Self {
             id: 0,
@@ -39,7 +40,7 @@ impl Alumno {
             rango: rango as u32,
             representante: representante.to_string(),
             numero_contacto: numero_contacto.to_string(),
-            rallita: false,
+            rallita: *rallita,
             
         }
     }
@@ -68,7 +69,14 @@ impl Alumno {
 
     
         pub fn cinta(&self) -> String {
-        Cintas::from_rango(self.rango).nombre().to_string()
+            let texto_cinta = Cintas::from_rango(self.rango).nombre().to_string();
+            if self.rallita {
+                let texto_rallita = Cintas::from_rango(self.rango.saturating_sub(1)).nombre().to_string();
+                format!("{texto_cinta} ralla {texto_rallita}")
+            } else {
+                 texto_cinta
+            }
+       
     }
 
     pub fn edad(&self) -> String {
