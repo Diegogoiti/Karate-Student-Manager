@@ -1,0 +1,11 @@
+{
+    "sqltools.useNodeRuntime": true,
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "BDB",
+            "database": "${workspaceFolder:Karate-Student-Manager}/database/database.db"
+        }
+    ]
+}

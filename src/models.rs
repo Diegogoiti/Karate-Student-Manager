@@ -19,6 +19,7 @@ pub struct Alumno {
     pub fecha_de_nacimiento: String,
     pub representante: String,
     pub numero_contacto: String,
+    pub rallita: bool,
     
 }
 
@@ -38,7 +39,7 @@ impl Alumno {
             rango: rango as u32,
             representante: representante.to_string(),
             numero_contacto: numero_contacto.to_string(),
-        
+            rallita: false,
             
         }
     }
@@ -50,6 +51,7 @@ impl Alumno {
         rango: u32,
         representante: &str,
         numero_contacto: &str,
+        rallita: &bool
     ) -> Self {
         Self {
             id: id as usize,
@@ -58,28 +60,15 @@ impl Alumno {
             rango,
             representante: representante.to_string(),
             numero_contacto: numero_contacto.to_string(),
-            
+            rallita: *rallita,
             
         }
     }
 
 
     
-    pub fn cinta(&self) -> String {
-        //utils::obtener_nombre_cinta(self.rango)
-        todo!("Implementar lógica de cinta basada en el rango")
-    }
-    pub fn rango_str(&self) -> String {
-        /*let tiene_rayita = (self.rango - self.rango.floor()).abs() > 0.1;
-
-        if !tiene_rayita && self.rango > 0.0 {
-            format!("{} kyu", self.rango.floor() as i32)
-        } else if tiene_rayita {
-            format!("{} kyu b", self.rango.floor() as i32)
-        } else {
-            format!("{} Dan", (self.rango.abs() as i32) + 1)
-        }*/
-        todo!("Implementar lógica de rango_str basada en el rango tomando en cuenta que de ahora en adelante se usaran enteros :)")
+        pub fn cinta(&self) -> String {
+        Cintas::from_rango(self.rango).nombre().to_string()
     }
 
     pub fn edad(&self) -> String {
@@ -108,7 +97,7 @@ impl Database {
     pub fn new(path: &str) -> rusqlite::Result<Self> {
         // 1. Intentamos crear el directorio y capturamos si hay un error real de sistema
         if let Err(e) = std::fs::create_dir_all("database") {
-            eprintln!("Error creando carpeta database: {}", e);
+            println!("Error creando carpeta database: {}", e);
         }
 
         // 2. Abrimos la conexión
@@ -131,7 +120,8 @@ impl Database {
             fecha_de_nacimiento TEXT NOT NULL,
             rango INTEGER NOT NULL,
             representante TEXT NOT NULL,
-            numero_contacto TEXT NOT NULL
+            numero_contacto TEXT NOT NULL,
+            rallita BOOLEAN NOT NULL DEFAULT 0
         )",
             [],
         )?;
@@ -154,7 +144,7 @@ impl Database {
 
     pub fn fetch_all(&self) -> rusqlite::Result<Vec<Alumno>> {
         let mut stmt = self.connection.prepare(
-        "SELECT id, nombre, fecha_de_nacimiento, rango, representante, numero_contacto FROM alumnos"
+        "SELECT id, nombre, fecha_de_nacimiento, rango, representante, numero_contacto, rallita FROM alumnos"
     )?;
 
         let alumno_iter = stmt.query_map([], |row| {
@@ -165,6 +155,7 @@ impl Database {
                 row.get(3)?,
                 &row.get::<_, String>(4)?,
                 &row.get::<_, String>(5)?,
+                &row.get::<_, bool>(6)?,
             ))
         })?; 
 
@@ -210,8 +201,126 @@ impl Database {
                 row.get(3)?,
                 &row.get::<_, String>(4)?,
                 &row.get::<_, String>(5)?,
+                &row.get::<_, bool>(6)?,
             ))
         },
     )
 }
 }
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Cintas {
+    Blanca,
+    Celeste,
+    Amarilla,
+    
+    Naranja,
+    Verde,
+    Azul1,
+    Azul2,
+    Marron1,
+    Marron2,
+    Marron3,
+    Negra,
+}
+
+impl Cintas {
+    pub fn all_variants() -> &'static [Cintas] {
+        &[
+            Cintas::Blanca,
+            Cintas::Celeste,
+            Cintas::Amarilla,
+            Cintas::Naranja,
+            Cintas::Verde,
+            Cintas::Azul1,
+            Cintas::Azul2,
+            Cintas::Marron1,
+            Cintas::Marron2,
+            Cintas::Marron3,
+            Cintas::Negra,
+        ]
+    }
+
+    pub fn from_rango(rango: u32) -> Self {
+        match rango {
+            10 => Cintas::Blanca,
+            9 => Cintas::Celeste,
+            8 => Cintas::Amarilla,
+            7 => Cintas::Naranja,
+            6 => Cintas::Verde,
+            5 => Cintas::Azul1,
+            4 => Cintas::Azul2,
+            3 => Cintas::Marron1,
+            2 => Cintas::Marron2,
+            1 => Cintas::Marron3,
+            _ => Cintas::Negra,
+        }
+    }
+
+    pub fn label(&self) -> &'static str {
+        match self {
+            Cintas::Blanca => "Blanca",
+            Cintas::Celeste => "Celeste",
+            Cintas::Amarilla => "Amarilla",
+            Cintas::Naranja => "Naranja",
+            Cintas::Verde => "Verde",
+            Cintas::Azul1 => "Azul 1",
+            Cintas::Azul2 => "Azul 2",
+            Cintas::Marron1 => "Marrón 1",
+            Cintas::Marron2 => "Marrón 2",
+            Cintas::Marron3 => "Marrón 3",
+            Cintas::Negra => "Negra",
+        }
+    }
+
+    pub fn nombre(&self) -> &'static str {
+        match self {
+            Cintas::Blanca => "Blanca",
+            Cintas::Celeste => "Celeste",
+            Cintas::Amarilla => "Amarilla",
+            Cintas::Naranja => "Naranja",
+            Cintas::Verde => "Verde",
+            Cintas::Azul1 | Cintas::Azul2 => "Azul",
+            Cintas::Marron1 | Cintas::Marron2 | Cintas::Marron3 => "Marrón",
+            Cintas::Negra => "Negra",
+        }
+    }
+
+    pub fn valor(&self) -> u32 {
+        match self {
+            Cintas::Blanca => 10,
+            Cintas::Celeste => 9,
+            Cintas::Amarilla => 8,
+            Cintas::Naranja => 7,
+            Cintas::Verde => 6,
+            Cintas::Azul1 => 5,
+            Cintas::Azul2 => 4,
+            Cintas::Marron1 => 3,
+            Cintas::Marron2 => 2,
+            Cintas::Marron3 => 1,
+            Cintas::Negra => 0,
+        }
+    }
+
+    pub fn nombres() -> &'static [&'static str] {
+        &[
+            "Blanca",
+            "Celeste",
+            "Amarilla",
+            "Naranja",
+            "Verde",
+            "Azul 1",
+            "Azul 2",
+            "Marrón 1",
+            "Marrón 2",
+            "Marrón 3",
+            "Negra",
+        ]
+    }
+
+    pub fn valores() -> &'static [u32] {
+        &[10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+    }
+}
+
+

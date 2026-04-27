@@ -8,6 +8,7 @@ use std::string;
 use dioxus::prelude::*;
 use crate::components::datatable::DataTable;
 use crate::components::searchbar::SearchBar;
+use crate::components::filter::Filter;
 use crate::my_app::{self, Columnas};
 
 
@@ -133,7 +134,7 @@ pub fn Filtrar() -> Element {
                 }
             }
 
-            SearchBar {
+            Filter {
                 on_input: move |data| filtro.set(data),
                 options: vec![
                     ("Cinta".to_string(),Columnas::Cinta),

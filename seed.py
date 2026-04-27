@@ -21,21 +21,21 @@ def llenar_db():
 
     nombres = ["Juan", "Maria", "Pedro", "Ana", "Luis", "Carmen", "Diego", "Elena", "Carlos", "Sofia"]
     apellidos = ["Garcia", "Rodriguez", "Perez", "Martinez", "Lopez", "Sanchez", "Gonzalez", "Diaz"]
-    rangos = [1.0, 1.5, 2.0, 2.5, 3.0, 4.0, 5.0] # Tus niveles de cinta
+    rangos = [x for x in range(0, 11)] # Tus niveles de cinta
 
     print("Insertando 100 alumnos de prueba...")
 
     for i in range(100):
         nombre_completo = f"{random.choice(nombres)} {random.choice(apellidos)}"
         fecha = generar_fecha()
-        rango = int(random.choice(rangos) * 10)
+        rango = int(random.choice(rangos))
         rep = f"Padre de {nombre_completo.split()[0]}"
         tlf = f"0414-{random.randint(1000000, 9999999)}"
 
         cursor.execute('''
-            INSERT INTO alumnos (nombre, fecha_de_nacimiento, rango, representante, numero_contacto)
-            VALUES (?, ?, ?, ?, ?)
-        ''', (nombre_completo, fecha, rango, rep, tlf))
+            INSERT INTO alumnos (nombre, fecha_de_nacimiento, rango, representante, numero_contacto, rallita)
+            VALUES (?, ?, ?, ?, ?, ?)
+        ''', (nombre_completo, fecha, rango, rep, tlf, random.choice([0, 1])))
 
     conn.commit()
     conn.close()
