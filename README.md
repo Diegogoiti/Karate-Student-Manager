@@ -1,6 +1,6 @@
-# Karate Student Manager (KSM) 🥋
+# BudoDB 🥋
 
-**KSM** es una solución de software eficiente y ligera diseñada para la gestión integral de alumnos en dojos de Karate. Desarrollado por **Diego Goitia**, este proyecto combina la seguridad y el rendimiento de **Rust** con una interfaz moderna construida en **Dioxus**.
+**BudoDB** es una solución de software eficiente y ligera diseñada para la gestión integral de alumnos en dojos de Karate. Desarrollado por **Diego Goitia**, este proyecto combina la seguridad y el rendimiento de **Rust** con una interfaz moderna construida en **Dioxus**.
 
 ![Version](https://img.shields.io/badge/version-0.1.0--alpha-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
@@ -43,7 +43,7 @@ El código sigue una arquitectura de backend profesional y modular:
 ### Instrucciones
 1. **Clonar el repositorio:**
 ```bash
-git clone https://github.com/Diegogoiti/Karate-Student-Manager.git
+git clone https://github.com/Diegogoiti/budodb.git
 cd Karate-Student-Manager
 ```
 
@@ -59,7 +59,7 @@ cd Karate-Student-Manager
 
 ## 📝 Notas del Desarrollador
 
-KSM nació de la necesidad de una herramienta de gestión que fuera rápida, privada y que no consumiera los recursos excesivos de las aplicaciones basadas en Electron. Al estar desarrollado íntegramente en Rust, ofrece un consumo de RAM mínimo y una estabilidad superior, ideal para el hardware del dojo.
+BudoDB nació de la necesidad de una herramienta de gestión que fuera rápida, privada y que no consumiera los recursos excesivos de las aplicaciones basadas en Electron. Al estar desarrollado íntegramente en Rust, ofrece un consumo de RAM mínimo y una estabilidad superior, ideal para el hardware del dojo.
 
 ---
 Desarrollado con 🦀 por [Diego Goitia](https://diegogoitia-dev.onrender.com).
