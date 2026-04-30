@@ -192,7 +192,7 @@ div { class: "flex flex-col h-screen max-w-2xl mx-auto p-4",
             }
 
             // Contenedor del Formulario[cite: 6, 8]
-            div { class: "flex-1 flex flex-col justify-around bg-white p-8 rounded-2xl shadow-xl ",
+            div { class: "flex-1 flex flex-col justify-around bg-white p-8 rounded-2xl shadow-xl transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-2xl",
                 
                 // Campo: Nombre
                 div { class: "flex flex-col space-y-1",
@@ -217,7 +217,7 @@ div { class: "flex flex-col h-screen max-w-2xl mx-auto p-4",
                     }
 
                     // Campo: Grado / Cinta[cite: 2]
-                    div { class: "flex flex-col",
+                    div { class: "flex flex-col space-y-1",
                         label { class: "text-sm font-semibold text-gray-600", "Grado (Kyu)" }
                         select {
                             class: "p-2 rounded-lg border border-gray-300 bg-gray-50",
@@ -234,7 +234,7 @@ div { class: "flex flex-col h-screen max-w-2xl mx-auto p-4",
                 }
 
                 // Campo: Representante
-                div { class: "flex flex-col",
+                div { class: "flex flex-col space-y-1",
                     label { class: "text-sm font-semibold text-gray-600", "Representante" }
                     input {
                         r#type: "text",
@@ -245,7 +245,7 @@ div { class: "flex flex-col h-screen max-w-2xl mx-auto p-4",
                 }
 
                 // Campo: Contacto y Rallita
-                div { class: "grid grid-cols-2 gap-4 ",
+                div { class: "grid grid-cols-2 gap-4 space-y-1 ",
                     div { class: "flex flex-col space-y-1",
                         label { class: "text-sm font-semibold text-gray-600", "Teléfono de Contacto" }
                         input {
@@ -278,10 +278,8 @@ div { class: "flex flex-col h-screen max-w-2xl mx-auto p-4",
                 }
             }
 
-            // Pie de página con recordatorio del código de conducta[cite: 2]
-            div { class: "text-center text-gray-400 text-[10px] tracking-widest uppercase",
-                "BudoDB • Gestión de Disciplina"
-            }
+            
+            
         }
     }
     }
