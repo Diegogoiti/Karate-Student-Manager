@@ -7,6 +7,7 @@ use crate::components::datatable::DataTable;
 use crate::components::filter::Filter;
 use crate::components::searchbar::SearchBar;
 use crate::my_app::{self, Columnas};
+use crate::models::{Alumno, Cintas};
 use dioxus::prelude::*;
 
 #[component]
@@ -167,45 +168,117 @@ pub fn Filtrar() -> Element {
     }
 }
 
+
 #[component]
 pub fn Agregar() -> Element {
-  let mut estado = use_context::<Signal<my_app::MyApp>>();
-
-    let mut filtro = use_signal(|| (my_app::Columnas::Nombre, String::new()));
-    let alumnos_filtrados = use_signal(|| estado.read().alumnos.clone());
-    let todos_seleccionados = !alumnos_filtrados.read().is_empty()
-        && alumnos_filtrados
-            .read()
-            .iter()
-            .all(|a| estado.read().seleccionados.contains(&a.id));
-    
-    {
-        let filtro = filtro.clone();
-        let estado = estado.clone();
-        let mut alumnos_filtrados = alumnos_filtrados.clone();
-        use_effect(move || {
-            let app = estado.read();
-            alumnos_filtrados.set(app.buscar_alumnos(filtro.read().0, &filtro.read().1));
-        });
-    }
+    // 1. Signals para manejar el estado del formulario
+    let mut nombre = use_signal(|| "".to_string());
+    let mut fecha_nac = use_signal(|| "".to_string());
+    let mut rango = use_signal(|| 10u32); // Por defecto "Blanca" (valor 10)[cite: 2]
+    let mut representante = use_signal(|| "".to_string());
+    let mut contacto = use_signal(|| "".to_string());
+    let mut rallita = use_signal(|| false);
 
     rsx! {
-        div { class: "flex flex-col h-full space-y-4",
-            div { class: "relative flex items-center justify-center py-2",
-                h2 { class: "text-3xl font-bold text-gray-800 text-center", "Agregar" }
+        div { class: "flex flex-col h-full space-y-6 max-w-2xl mx-auto",
+            // Encabezado
+            div { class: "text-center py-4",
+                h2 { class: "text-3xl font-bold text-gray-800", "Registrar Nuevo Alumno" }
+                p { class: "text-gray-500", "Ingresa los datos personales y de grado del karateka." }
+            }
+
+            // Contenedor del Formulario[cite: 6, 8]
+            div { class: "bg-white p-8 rounded-2xl shadow-xl border border-gray-200 space-y-4",
+                
+                // Campo: Nombre
+                div { class: "flex flex-col space-y-1",
+                    label { class: "text-sm font-semibold text-gray-600", "Nombre Completo" }
+                    input {
+                        r#type: "text",
+                        class: "p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none",
+                        placeholder: "Ej. Ichiro Suzuki",
+                        oninput: move |e| nombre.set(e.value())
+                    }
+                }
+
+                div { class: "grid grid-cols-2 gap-4",
+                    // Campo: Fecha de Nacimiento
+                    div { class: "flex flex-col space-y-1",
+                        label { class: "text-sm font-semibold text-gray-600", "Fecha de Nacimiento" }
+                        input {
+                            r#type: "date",
+                            class: "p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none",
+                            oninput: move |e| fecha_nac.set(e.value())
+                        }
+                    }
+
+                    // Campo: Grado / Cinta[cite: 2]
+                    div { class: "flex flex-col space-y-1",
+                        label { class: "text-sm font-semibold text-gray-600", "Grado (Kyu)" }
+                        select {
+                            class: "p-2 rounded-lg border border-gray-300 bg-gray-50",
+                            onchange: move |e| {
+                                if let Ok(val) = e.value().parse::<u32>() {
+                                    rango.set(val);
+                                }
+                            },
+                            {Cintas::all_variants().iter().map(|cinta| rsx! {
+                                option { value: "{cinta.valor()}", "{cinta.label()}" }
+                            })}
+                        }
+                    }
+                }
+
+                // Campo: Representante
+                div { class: "flex flex-col space-y-1",
+                    label { class: "text-sm font-semibold text-gray-600", "Representante" }
+                    input {
+                        r#type: "text",
+                        class: "p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none",
+                        placeholder: "Nombre del padre o tutor",
+                        oninput: move |e| representante.set(e.value())
+                    }
+                }
+
+                // Campo: Contacto y Rallita
+                div { class: "grid grid-cols-2 gap-4 items-end",
+                    div { class: "flex flex-col space-y-1",
+                        label { class: "text-sm font-semibold text-gray-600", "Teléfono de Contacto" }
+                        input {
+                            r#type: "tel",
+                            class: "p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none",
+                            placeholder: "0412-0000000",
+                            oninput: move |e| contacto.set(e.value())
+                        }
+                    }
+
+                    // Checkbox de Rallita[cite: 6]
+                    label { class: "flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors",
+                        input {
+                            r#type: "checkbox",
+                            class: "w-5 h-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500",
+                            onchange: move |_| rallita.set(!rallita.cloned())
+                        }
+                        span { class: "text-sm font-medium text-gray-700", "Grado con Rallita" }
+                    }
+                }
+
+                // Botón de Acción
                 button {
-                    class: "absolute right-0 px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition-colors text-sm",
+                    class: "w-full mt-4 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 shadow-lg shadow-blue-200 transition-all active:scale-[0.98]",
                     onclick: move |_| {
-                        //estado.write().toggle_all(alumnos_filtrados.read().clone());
+                        println!("Guardando: {} - Cinta: {}", nombre.read(), rango.read());
+                        // Aquí conectarás con app_state.write().database.save(...) más adelante
                     },
-                    "Guardar"
+                    "Añadir Al Dojo"
                 }
             }
 
-            div { class: "p-10 border-2 border-dashed border-gray-300 rounded-xl text-center",
-                "Formulario de registro de alumno (Próximamente)"}
+            // Pie de página con recordatorio del código de conducta[cite: 2]
+            div { class: "text-center text-gray-400 text-[10px] tracking-widest uppercase",
+                "BudoDB • Gestión de Disciplina"
+            }
         }
-
     }
 }
 
