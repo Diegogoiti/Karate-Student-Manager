@@ -180,6 +180,10 @@ pub fn Agregar() -> Element {
     let mut rallita = use_signal(|| false);
 
     rsx! {
+
+
+div { class: "flex flex-col h-screen max-w-2xl mx-auto p-4",
+
         div { class: "flex flex-col h-full space-y-6 max-w-2xl mx-auto",
             // Encabezado
             div { class: "text-center py-4",
@@ -188,7 +192,7 @@ pub fn Agregar() -> Element {
             }
 
             // Contenedor del Formulario[cite: 6, 8]
-            div { class: "bg-white p-8 rounded-2xl shadow-xl border border-gray-200 space-y-4",
+            div { class: "flex-1 flex flex-col justify-around bg-white p-8 rounded-2xl shadow-xl ",
                 
                 // Campo: Nombre
                 div { class: "flex flex-col space-y-1",
@@ -213,7 +217,7 @@ pub fn Agregar() -> Element {
                     }
 
                     // Campo: Grado / Cinta[cite: 2]
-                    div { class: "flex flex-col space-y-1",
+                    div { class: "flex flex-col",
                         label { class: "text-sm font-semibold text-gray-600", "Grado (Kyu)" }
                         select {
                             class: "p-2 rounded-lg border border-gray-300 bg-gray-50",
@@ -230,7 +234,7 @@ pub fn Agregar() -> Element {
                 }
 
                 // Campo: Representante
-                div { class: "flex flex-col space-y-1",
+                div { class: "flex flex-col",
                     label { class: "text-sm font-semibold text-gray-600", "Representante" }
                     input {
                         r#type: "text",
@@ -241,7 +245,7 @@ pub fn Agregar() -> Element {
                 }
 
                 // Campo: Contacto y Rallita
-                div { class: "grid grid-cols-2 gap-4 items-end",
+                div { class: "grid grid-cols-2 gap-4 ",
                     div { class: "flex flex-col space-y-1",
                         label { class: "text-sm font-semibold text-gray-600", "Teléfono de Contacto" }
                         input {
@@ -279,6 +283,7 @@ pub fn Agregar() -> Element {
                 "BudoDB • Gestión de Disciplina"
             }
         }
+    }
     }
 }
 
